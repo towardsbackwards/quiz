@@ -4,15 +4,19 @@
 <head>
     <meta charset="utf-8">
     <title>
-Quiz form
+{{ project_title }}
     </title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 {% block head %}
-    <a href="{{ request.META.HTTP_REFERER }}">Назад</a>
-    <a href="{% url 'main:index' %}">На главную</a>
+    <ul class="list-unstyled text-center">
+    <li><a href="{{ request.META.HTTP_REFERER }}">Назад</a></li>
+    <li><a href="{% url 'main:index' %}">На главную</a></li>
+    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+    <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+    </ul>
 {% endblock %}
 
 {% block body %}

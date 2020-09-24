@@ -1,10 +1,13 @@
 from django.views.generic import FormView, TemplateView
 
 from mainapp.forms import QuizForm
+from mainapp.models import Quiz
 
 
 class IndexView(TemplateView):
     template_name = 'index.html'
+    active_quizzes = Quiz.objects.filter(active=True)
+    extra_context = {'active_quizzes': active_quizzes}
 
 
 class QuizView(FormView):

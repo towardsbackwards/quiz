@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+{% if form.errors %}
+  <p>Вы указали неверный логин и/или пароль</p>
+{% endif %}
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>У Вас нет доступа к данной странице</p>
+  {% else %}
+    <p>Пожалуйста, залогиньтесь, чтобы Вы могли видеть эту страницу</p>
+  {% endif %}
+{% endif %}
+<div class="d-flex justify-content-center">
+
+    <form method="post">
+        {% csrf_token %}
+        <label>
+            <input type="text" name="username" placeholder=Логин>
+        </label>
+        <label>
+            <input type="password" name="password" placeholder=Пароль>
+        </label>
+        <input type="submit" value="Войти">
+    </form>
+</div>
+{% endblock %}

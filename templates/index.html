@@ -1,4 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
-Index page
+    <div class="text-center">
+    {% if not user.is_authenticated %}
+<p>В данный момент Вы не авторизованы на сайте</p>
+{% else %}
+Вы вошли как <div style="color: #ba8b00; display: inline">{{ user.username }}</div>
+{% endif %}
+        Активные опросы:
+    {% for quiz in active_quizzes %}
+    <p><a href="{% url 'main:quiz' quiz.id %}">Опрос № {{ quiz.id }}</a></p>
+    {% endfor %}
+    </div>
 {% endblock %}

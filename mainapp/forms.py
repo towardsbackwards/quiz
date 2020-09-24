@@ -1,4 +1,5 @@
-from django.forms import ModelForm, CharField, Textarea, ModelChoiceField, ModelMultipleChoiceField
+from django.forms import ModelForm, CharField, Textarea, ModelChoiceField, ModelMultipleChoiceField, \
+    CheckboxSelectMultiple
 
 from mainapp.models import Quiz
 
@@ -18,9 +19,16 @@ class QuizForm(ModelForm):
         super().__init__(*args, **kwargs)
         for question in questions:
             if question.type == 1:
-                self.fields[question.title] = ModelChoiceField(queryset=question.choice_set.all())
+                self.fields[question.title] = ModelChoiceField(queryset=question.choice_set.all(),
+                                                               required=True)
             elif question.type == 2:
-                self.fields[question.title] = ModelMultipleChoiceField(queryset=question.choice_set.all())
+                self.fields[question.title] = ModelMultipleChoiceField(widget=CheckboxSelectMultiple,
+                                                                       queryset=question.choice_set.all(),
+                                                                       required=True)
             elif question.type == 3:
-                self.fields[question.title] = CharField(widget=Textarea(), label=question.text, required=False)
-            self.fields[question.title].widget.attrs['class'] = 'form-control'
+                self.fields[question.title] = CharField(widget=Textarea(),
+                                                        label=question.text,
+                                                        required=True)
+            #self.fields[question.title].widget.attrs['class'] = 'form-control'
+
+    #  при сохранении взять так же пользователя

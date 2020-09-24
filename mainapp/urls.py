@@ -7,5 +7,5 @@ app_name = 'mainapp'
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    path('quiz/<int:quiz_pk>', QuizView.as_view()),
+    path('quiz/<int:quiz_pk>', QuizView.as_view(), name='quiz'),
 ]
