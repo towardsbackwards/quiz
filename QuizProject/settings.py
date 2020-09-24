@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
     'coreapp.apps.CoreappConfig',
+    'authapp.apps.AuthappConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +127,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+AUTH_USER_MODEL = 'authapp.Account'

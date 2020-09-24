@@ -6,9 +6,8 @@ class CoreModel(models.Model):
     class Meta:
         verbose_name = 'Базовая модель'
         verbose_name_plural = 'Базовые модели'
-    title = models.CharField('Заголовок', max_length=128, blank=True, null=True)
-    description = models.TextField('Описание', max_length=1024, blank=True, null=True)
-    sort = models.IntegerField('Номер для сортировки', default=0, blank=True, null=False)
+    title = models.CharField('Заголовок', max_length=256, blank=True, null=True)
+    description = models.TextField('Описание', max_length=2048, blank=True, null=True)
     active = models.BooleanField('Активен ли объект', default=True, db_index=True)
 
     def inactive(self):

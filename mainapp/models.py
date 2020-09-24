@@ -1,54 +1,55 @@
+from QuizProject import settings
 from coreapp.models import CoreModel, ImageModel
 from django.db import models
 
 
-class QuestionModel(CoreModel, models.Model):
-    """Модель участника"""
+class Quiz(CoreModel, models.Model):
     class Meta:
-        verbose_name = "Участник"
-        verbose_name_plural = "Участники"
-    types = (
-        ('a', 'Single choice'),
-        ('b', 'Multiple choice'),
-        ('c', 'Text answer'),
+        verbose_name = 'Опрос'
+        verbose_name_plural = 'Опросы'
+
+    def __str__(self):
+        return self.title
+
+
+class Question(CoreModel, models.Model):
+    class Meta:
+        verbose_name = 'Вопрос'
+        verbose_name_plural = 'Вопросы'
+    TYPES = (
+        (1, 'One option answer'),
+        (2, 'Multiple options answer'),
+        (3, 'Text answer'),
     )
-    question_text = models.TextField('Имя участника', max_length=1024)
-    question_type = models.CharField(max_length=1, choices=types)
+    type = models.IntegerField(choices=TYPES, default=1, verbose_name='Тип вопроса')
+    text = models.CharField(max_length=2048, null=False, blank=False, verbose_name='Текст вопроса')
+    from_quiz = models.ForeignKey(Quiz, on_delete=models.DO_NOTHING, verbose_name='Опрос', null=True)
 
     def __str__(self):
-        return f'{self.title}'
+        return self.title
 
 
-class PollEventModel(CoreModel, models.Model):
-    """Модель голосования"""
+class Choice(CoreModel, models.Model):
     class Meta:
-        verbose_name = "голосование"
-        verbose_name_plural = "Голосования"
-
-    date_start = models.DateTimeField(null=True, verbose_name='Дата начала')
-    date_end = models.DateTimeField(null=True, verbose_name='Дата завершения')
-    question = models.ForeignKey(QuestionModel, verbose_name='Вопрос', on_delete=models.PROTECT)
-    votes_limit = models.PositiveIntegerField(null=True, verbose_name='Лимит голосов для досрочного завершения')
+        verbose_name = 'Вариант ответа'
+        verbose_name_plural = 'Варианты ответа'
+    from_question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, verbose_name='Вопрос')
+    text = models.CharField(max_length=2048, null=False, blank=False, verbose_name='Текст варианта')
+    correct = models.BooleanField(default=False, verbose_name='Вариант верен?')
 
     def __str__(self):
-        return f'Голосование {self.title}'
+        return self.title
 
 
-# class Votes(CoreModel, models.Model):
-#     """Промежуточная модель для хранения данных :голосование - участник - количество голосов:"""
-#     class Meta:
-#         verbose_name = "Голоса"
-#         verbose_name_plural = "Голоса"
+
 #
-#     poll = models.ForeignKey(PollEventModel, verbose_name='Голосование', on_delete=models.CASCADE)
-#     participant = models.ForeignKey(ParticipantModel, verbose_name='Участники', on_delete=models.CASCADE)
-#     participant_votes_count = models.PositiveIntegerField(null=True, verbose_name='Количество голосов', default=0)
+#
+# class Answer(CoreModel, models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, verbose_name='ПОльзователь')
+#     question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, verbose_name='Вопрос')
+#     choice = models.ForeignKey(Choice, on_delete=models.DO_NOTHING, verbose_name='Выбранный вариант')
+#     text = models.CharField(max_length=2048, null=False, blank=False, verbose_name='Текст ответа')
+#     created = models.DateTimeField(auto_now_add=True, verbose_name='Время ответа')
 #
 #     def __str__(self):
-#         return f'{self.poll} — {self.participant} (голосов {self.participant_votes_count})'
-#
-#
-# class VotersIP(CoreModel, models.Model):
-#     """Модель для хранения данных :опрос - ip голосовавшего:"""
-#     poll = models.ForeignKey(PollEventModel, verbose_name='Голосование', on_delete=models.CASCADE)
-#     ip = models.GenericIPAddressField()
+#         return self.choice.title

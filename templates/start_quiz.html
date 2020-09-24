@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+<form action="" style="width: 50em; margin: auto" method="POST" id="city_form">
+
+    {% csrf_token %}
+    <fieldset name="fieldset">
+        {{ form }}
+        {{ form.questions }}
+    </fieldset>
+    <input type="submit" value="Save form">
+
+</form>
+{% endblock %}
