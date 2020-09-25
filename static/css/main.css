@@ -1,0 +1,8 @@
+.quiz_form li{
+    list-style-type: none;
+}
+
+.quiz_form {
+    width: 50%;
+    justify-content: center;
+}

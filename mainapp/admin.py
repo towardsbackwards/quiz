@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Question, Choice, Quiz
+from .models import Question, Choice, Quiz, AnswerChoice, AnswersMultiChoice, AnswerText
 
 
 class ChoiceInline(admin.TabularInline):
@@ -28,3 +28,6 @@ class QuizAdmin(admin.ModelAdmin):
 admin.site.register(Choice)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Quiz, QuizAdmin)
+admin.site.register(AnswerChoice)
+admin.site.register(AnswersMultiChoice)
+admin.site.register(AnswerText)
