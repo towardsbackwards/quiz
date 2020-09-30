@@ -10,6 +10,7 @@ django = "==2.2.10"
 psycopg2 = "*"
 pillow = "*"
 djangorestframework = "*"
+django-ipware = "*"
 
 [requires]
 python_version = "3.8"

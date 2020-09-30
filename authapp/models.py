@@ -10,3 +10,6 @@ class Account(CoreModel, AbstractUser):
         verbose_name_plural = "Пользователи"
     first_name = models.CharField('Имя пользователя', max_length=32, blank=True)
     objects = UserManager()
+
+    def __str__(self):
+        return f'{self.username} (id={self.id})'

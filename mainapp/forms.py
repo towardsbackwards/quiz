@@ -1,7 +1,11 @@
-from django.forms import ModelForm, CharField, Textarea, ModelChoiceField, ModelMultipleChoiceField, \
+from datetime import datetime
+
+from django.core.exceptions import ValidationError
+from django.db.models import Q
+from django.forms import ModelForm, CharField, ModelChoiceField, ModelMultipleChoiceField, \
     CheckboxSelectMultiple, TextInput
 
-from mainapp.models import Quiz
+from mainapp.models import Quiz, Answer, Question
 
 
 class QuizForm(ModelForm):
@@ -12,6 +16,8 @@ class QuizForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.quiz_pk = kwargs.pop('quiz_pk')
+        self.ip = kwargs.pop('ip')
+        self.user = kwargs.pop('user')
         questions = Quiz.objects.get(id=self.quiz_pk).question_set.all()
         super().__init__(*args, **kwargs)
         for question in questions:
@@ -31,8 +37,42 @@ class QuizForm(ModelForm):
                                                  required=True)
                 self.fields[current].widget.attrs['class'] = 'form-control'
 
-    def save(self, commit=True):
-        buffer = super(QuizForm, self).save(commit=False)
-        print(self.data)
+    def clean(self):
+        """Проверка уникальности пары ip-имя пользователя"""
+        cd = self.cleaned_data
+        if self.user.is_anonymous:
+            """Если пользователь прошел опрос анонимно"""
+            if Answer.objects.filter(Q(user_ip=self.ip) &
+                                     Q(answered_question__from_quiz=self.quiz_pk)).exists():
+                raise ValidationError("С этого ip уже участвовали в данном опросе")
+        else:
+            """Если пользователь прошел опрос залогинившись"""
+            if Answer.objects.filter(Q(user_ip=self.ip) &
+                                     Q(answered_question__from_quiz=self.quiz_pk) &
+                                     Q(user=self.user)).exists():
+                raise ValidationError("С этого ip уже участвовали в данном опросе")
+        return cd
 
-    #  при сохранении взять так же пользователя
+    def save(self, commit=True):
+        # вставить проверку ip
+        now = datetime.now
+        for question, answer in self.cleaned_data.items():
+            if Question.objects.get(title=question).type == 1:
+                Answer.objects.create(user_ip=self.ip,
+                                      answered_question=Question.objects.get(title=question),
+                                      answer_choice=answer,
+                                      created=now,
+                                      user=self.user)
+            elif Question.objects.get(title=question).type == 2:
+                for item in answer:
+                    Answer.objects.create(user_ip=self.ip,
+                                          answered_question=Question.objects.get(title=question),
+                                          answer_choice=item,
+                                          created=now,
+                                          user=self.user)
+            elif Question.objects.get(title=question).type == 3:
+                Answer.objects.create(user_ip=self.ip,
+                                      answered_question=Question.objects.get(title=question),
+                                      answer_text=answer,
+                                      created=now,
+                                      user=self.user)

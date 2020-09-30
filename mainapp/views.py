@@ -1,5 +1,5 @@
 from django.views.generic import FormView, TemplateView
-
+from ipware import get_client_ip
 from mainapp.forms import QuizForm
 from mainapp.models import Quiz
 
@@ -16,15 +16,19 @@ class QuizView(FormView):
     success_url = '/'
 
     def get_form_kwargs(self):
+        user = self.request.user
         quiz_pk = self.kwargs.get('quiz_pk', None)
+        ip, is_routable = get_client_ip(self.request)
         form_kwargs = super(QuizView, self).get_form_kwargs()
+        form_kwargs['user'] = user
         form_kwargs['quiz_pk'] = quiz_pk
+        form_kwargs['ip'] = ip
         return form_kwargs
 
     def form_valid(self, form):
-        if not self.request.session or not self.request.session.session_key:
-            self.request.session.save()
+        # if ip not in str(VotersIP.objects.filter(poll_id=poll_id).values('ip')):
+        #     store_ip(ip, poll_id)
+        # else:
+        #     return HttpResponse(f'С данного ip-адреса уже голосовали в этом опросе!')
         form.save()
-        print(self.request.session.session_key)
-        print(self.request.user.is_anonymous)
         return super(QuizView, self).form_valid(form)
