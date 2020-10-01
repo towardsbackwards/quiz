@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+
+    <div class="text-center">
+        {% for answer in quiz_answers %}
+            {% if answer.answer_choice and answer.answered_question.type == 1 %}
+                <p><strong>Вопрос:</strong><br>
+                {{ answer.answered_question }}</p>
+                <p><strong>Ваш ответ:<br>
+                </strong>{{ answer.answer_choice.text }}</p>
+            {% endif %}
+            {% if answer.answer_choice and answer.answered_question.type == 2 %}
+                <p><strong>Вопрос:</strong><br>
+                {{ answer.answered_question }}</p>
+                <p><strong>Ваш ответ:</strong><br>
+                {% for multi_answer in answer.answered_question.answer_set.all %}
+                    {{ multi_answer.answer_choice.text }}<br>
+                {% endfor %}
+                </p>
+            {% endif %}
+            {% if answer.answer_text %}
+                <p><strong>Вопрос - </strong>{{ answer.answered_question }}</p>
+                <p><strong>Ваш ответ - </strong>{{ answer.answer_text }}</p>
+            {% endif %}
+    {% endfor %}
+    </div>
+    </div>
+{% endblock %}

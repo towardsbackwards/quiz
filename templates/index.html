@@ -8,7 +8,11 @@
 {% endif %}
         Активные опросы:
     {% for quiz in active_quizzes %}
-    <p><a href="{% url 'main:quiz' quiz.id %}">Опрос № {{ quiz.id }}</a></p>
+    <p><a href="{% url 'main:quiz' quiz.id %}">Опрос "{{ quiz.title }}"</a></p>
+    {% endfor %}
+        Пройденные мной опросы:
+    {% for quiz in user_passed_quizzes %}
+        <p><a href="{% url 'main:passed' quiz.id %}">Опрос "{{ quiz.title }}"</a></p>
     {% endfor %}
     </div>
 {% endblock %}
