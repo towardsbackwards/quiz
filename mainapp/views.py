@@ -49,7 +49,5 @@ class PassedQuizzesView(DetailView):
         context = super().get_context_data(**kwargs)
         quiz_pk = self.kwargs.get('pk')
         quiz_questions = Question.objects.filter(from_quiz_id=quiz_pk)
-        quiz_answers = Answer.objects.filter(answered_question__from_quiz_id=quiz_pk)
         context['quiz_questions'] = quiz_questions
-        context['quiz_answers'] = quiz_answers
         return context
