@@ -12,10 +12,17 @@ class ChoiceInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    class Media:
+        js = (
+            '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
+            '/static/js/disable_checkbox.js',
+        )
+
     inlines = (ChoiceInline,)
 
 
 class QuestionInline(admin.TabularInline):
+
     model = Question
     exclude = ('description',)
     extra = 0
@@ -27,8 +34,6 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class AnswerAdmin(admin.ModelAdmin):
-    class Media:
-        js = ('/static/js/hide_null.js',)
 
     readonly_fields = ('answer_choice',
                        'answer_text',
