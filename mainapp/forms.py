@@ -9,6 +9,7 @@ from mainapp.models import Quiz, Answer, Question
 
 
 class QuizForm(ModelForm):
+    """Универсальная форма опроса"""
     class Meta:
         model = Quiz
         fields = '__all__'
@@ -22,6 +23,7 @@ class QuizForm(ModelForm):
         super().__init__(*args, **kwargs)
         for question in questions:
             current = f'{question.title}'
+            #  Корректировка отображения полей вопросов в зависимости от их типа
             if question.type == 1:
                 self.fields[current] = ModelChoiceField(queryset=question.choice_set.all(),
                                                         required=True)
@@ -41,12 +43,12 @@ class QuizForm(ModelForm):
         """Проверка уникальности пары ip-имя пользователя"""
         cd = self.cleaned_data
         if self.user.is_anonymous:
-            """Если пользователь прошел опрос анонимно"""
+            # Если пользователь прошел опрос анонимно
             if Answer.objects.filter(Q(user_ip=self.ip) &
                                      Q(answered_question__from_quiz=self.quiz_pk)).exists():
                 raise ValidationError("С этого ip уже участвовали в данном опросе")
         else:
-            """Если пользователь прошел опрос залогинившись"""
+            # Если пользователь прошел опрос залогинившись
             if Answer.objects.filter(Q(user_ip=self.ip) &
                                      Q(answered_question__from_quiz=self.quiz_pk) &
                                      Q(user=self.user)).exists():
@@ -54,7 +56,8 @@ class QuizForm(ModelForm):
         return cd
 
     def save(self, commit=True):
-        # вставить проверку ip
+        # Сохранение моделей ответов в базу в зависимости от
+        # тип вопроса, на который был ответ
         now = datetime.now
         for question, answer in self.cleaned_data.items():
             if Question.objects.get(title=question).type == 1:

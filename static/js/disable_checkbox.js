@@ -26,6 +26,13 @@ $(document).on('change', '#id_type', function(){
               $(this).prop('disabled', true);
               }
               });
+    } else {
+         $('[name~="choice"], [name$="correct"]').each(function() {
+              if (!$(this).is(':checked')) {
+              $(this).prop('disabled', false);
+              $(this).css('background-color', 'red');
+              }
+              });
     }
 } );
 

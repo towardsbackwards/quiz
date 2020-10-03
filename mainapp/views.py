@@ -1,10 +1,12 @@
 from django.views.generic import FormView, TemplateView, DetailView
 from ipware import get_client_ip
 from mainapp.forms import QuizForm
-from mainapp.models import Quiz, Question, Answer
+from mainapp.models import Quiz, Question
 
 
 class IndexView(TemplateView):
+    """Контроллер отображения главной страницы
+    Содержит как активные опросы, так и уже пройденные пользователем"""
     template_name = 'index.html'
     active_quizzes = Quiz.objects.filter(active=True)
     extra_context = {'active_quizzes': active_quizzes}
@@ -22,6 +24,7 @@ class IndexView(TemplateView):
 
 
 class QuizView(FormView):
+    """Контроллер отоборажения формы опроса"""
     form_class = QuizForm
     template_name = 'start_quiz.html'
     success_url = '/'
@@ -42,6 +45,7 @@ class QuizView(FormView):
 
 
 class PassedQuizzesView(DetailView):
+    """Контроллер отображения пройденных опросов с ответами"""
     model = Quiz
     template_name = 'passed_quizzes.html'
 

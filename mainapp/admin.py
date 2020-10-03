@@ -12,6 +12,9 @@ class ChoiceInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    """В модель вопроса подгружены JQuery-скрипт, который
+    не позволяет выбрать более одного варианта, если тип
+    вопроса предполагает один верный ответ """
     class Media:
         js = (
             '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
@@ -22,7 +25,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class QuestionInline(admin.TabularInline):
-
+    """Корректировка отображения модели вопроса в админке"""
     model = Question
     exclude = ('description',)
     extra = 0
@@ -34,7 +37,10 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class AnswerAdmin(admin.ModelAdmin):
-
+    """Дополнения отображения в админ-панели ответов пользователя.
+    Добавлены столбцы с выбором/текстом ответа, заданного вопроса,
+    опроса, содержащего данный вопрос, времени ответа,
+    ip пользователя, имени пользователя"""
     readonly_fields = ('answer_choice',
                        'answer_text',
                        'answered_question',

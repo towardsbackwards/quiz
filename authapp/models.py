@@ -4,7 +4,7 @@ from coreapp.models import CoreModel
 
 
 class Account(CoreModel, AbstractUser):
-    """Класс пользователя"""
+    """Расширенный класс пользователя"""
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"

@@ -1,5 +1,4 @@
 from django.urls import path
-from . import views
 from .views import QuizView, IndexView, PassedQuizzesView
 
 app_name = 'mainapp'
