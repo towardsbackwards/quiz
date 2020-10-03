@@ -3,15 +3,16 @@
     <div class="text-center">
         {% for question in quiz_questions %}
             <p>{{ question }}</p>
+            Ваш ответ:
                 {% for answer in question.answer_set.all %}
                     {% if answer.answer_choice and question.type == 1%}
-                        {{ answer.answer_choice.text }}
+                       <strong> <br>{{ answer.answer_choice.text }}</strong>
                     {% endif %}
                     {% if answer.answer_choice and question.type == 2%}
-                        {{ forloop.counter }}) {{ answer.answer_choice.text }}
+                        <strong><br>{{ forloop.counter }}) {{ answer.answer_choice.text }}</strong>
                     {% endif %}
                     {% if answer.answer_text %}
-                        {{ answer.answer_text }}
+                        <strong><br>{{ answer.answer_text }}</strong>
                     {% endif %}
                     <br>
                 {% endfor %}
