@@ -23,14 +23,13 @@ $(document).on('change', '#id_type', function(){
     if ($check && $('#id_type').val() === '1') {
          $('[name~="choice"], [name$="correct"]').each(function() {
               if (!$(this).is(':checked')) {
-              $(this).prop('disabled', true);
+                  $('[name~="choice"], [name$="correct"]').prop('checked', false);
               }
               });
     } else {
          $('[name~="choice"], [name$="correct"]').each(function() {
               if (!$(this).is(':checked')) {
-              $(this).prop('disabled', false);
-              $(this).css('background-color', 'red');
+                  $(this).prop('disabled', false);
               }
               });
     }
