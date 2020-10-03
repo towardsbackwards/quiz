@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="text-center">
+        <br><br><h3>Активные опросы:</h3><br>
+    {% for quiz in object_list %}
+    <p><a href="{% url 'main:active_quiz' quiz.id %}">Опрос "{{ quiz.title }}"</a></p>
+    {% endfor %}
+    </div>
+{% endblock %}
