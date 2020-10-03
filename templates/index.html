@@ -6,11 +6,11 @@
 {% else %}
 Вы вошли как <div style="color: #ba8b00; display: inline">{{ user.username }}</div>
 {% endif %}
-        Активные опросы:
+        <br><br><h3>Активные опросы:</h3><br>
     {% for quiz in active_quizzes %}
     <p><a href="{% url 'main:quiz' quiz.id %}">Опрос "{{ quiz.title }}"</a></p>
     {% endfor %}
-        Пройденные мной опросы:
+        <br><br>Пройденные мной опросы:<br><br>
     {% for quiz in user_passed_quizzes %}
         <p><a href="{% url 'main:passed' quiz.id %}">Опрос "{{ quiz.title }}"</a></p>
     {% endfor %}
