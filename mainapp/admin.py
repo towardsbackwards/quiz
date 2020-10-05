@@ -27,7 +27,6 @@ class QuestionAdmin(admin.ModelAdmin):
 class QuestionInline(admin.TabularInline):
     """Корректировка отображения модели вопроса в админке"""
     model = Question
-    readonly_fields = ('choice',)
     exclude = ('description',)
     extra = 0
     fk_name = 'from_quiz'

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.db.models import Q
 from django.forms import ModelForm, CharField, ModelChoiceField, ModelMultipleChoiceField, \
     CheckboxSelectMultiple, TextInput
@@ -55,9 +56,10 @@ class QuizForm(ModelForm):
                 raise ValidationError("С этого ip уже участвовали в данном опросе")
         return cd
 
+    @transaction.atomic
     def save(self, commit=True):
         # Сохранение моделей ответов в базу в зависимости от
-        # тип вопроса, на который был ответ
+        # типа вопроса, на который был ответ
         now = datetime.now
         for question, answer in self.cleaned_data.items():
             if Question.objects.get(title=question).type == 1:
